@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Kamus Digital Bahasa Mandar - Indonesia | Boyang Digital</title>
+  
+  <!-- SEO & Social Media Meta Tags -->
+  <meta name="description" content="Kamus Digital Bahasa Mandar - Indonesia lengkap dan interaktif. Pembaca buku PDF online gratis, pencarian kosakata dua arah, dan pelestarian bahasa daerah Mandar untuk seluruh masyarakat.">
+  <meta name="keywords" content="Kamus Bahasa Mandar, Mandar Indonesia, Bahasa Mandar, Sandeq, Saqbe, Budaya Mandar, Boyang Digital, Kamus Mandar Online, Sulawesi Barat">
+  <meta name="author" content="Boyang Digital">
+  <meta name="theme-color" content="#0c2340">
+
+  <!-- Open Graph / WhatsApp Sharing -->
+  <meta property="og:title" content="Kamus Digital Bahasa Mandar - Indonesia (Gratis)">
+  <meta property="og:description" content="Akses kamus kosakata bahasa Mandar-Indonesia dan baca buku PDF lengkap secara gratis untuk seluruh masyarakat Mandar.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=1000&auto=format&fit=crop">
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230c2340'/><path d='M30 75 L50 25 L70 75 L55 75 L50 45 L45 75 Z' fill='%23d4af37'/><circle cx='50' cy='20' r='6' fill='%23f1c40f'/></svg>">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- PDF.js CDN by Mozilla -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Announcement Banner -->
+  <aside class="top-banner" aria-label="Pengumuman">
+    <div class="banner-container">
+      <span class="badge-free"><i data-lucide="sparkles"></i> 100% GRATIS & TERBUKA</span>
+      <p class="banner-text">Inisiatif Pelestarian Bahasa Daerah & Budaya Mandar (Sulawesi Barat) untuk Seluruh Masyarakat</p>
+      <button class="btn-banner-guide" id="btnOpenDeployGuide" title="Panduan Deploy GitHub">
+        <i data-lucide="github"></i> Info GitHub Pages
+      </button>
+    </div>
+  </aside>
+
+  <!-- Header Section -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <div class="brand-icon">
+          <i data-lucide="book-open"></i>
+        </div>
+        <div class="brand-info">
+          <h1 class="brand-title">Kamus Bahasa Mandar <span class="accent-text">⇄ Indonesia</span></h1>
+          <p class="brand-subtitle">Boyang Digital • Pelestarian Bahasa & Budaya Mandar</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="header-btn" id="btnOpenFavorites" title="Lihat Kata Tersimpan">
+          <i data-lucide="bookmark"></i>
+          <span class="btn-text">Favorit</span>
+          <span class="badge-counter" id="favCount">0</span>
+        </button>
+        <button class="header-btn" id="btnShareApp" title="Bagikan Web Kamus">
+          <i data-lucide="share-2"></i>
+          <span class="btn-text">Bagikan</span>
+        </button>
+        <button class="header-btn" id="btnThemeToggle" title="Ganti Tema">
+          <i data-lucide="moon" id="themeIcon"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Navigation Tabs -->
+    <nav class="main-nav" aria-label="Menu Utama">
+      <div class="nav-container">
+        <button class="nav-tab active" data-tab="tab-search" id="tabBtnSearch">
+          <i data-lucide="search"></i>
+          <span>Cari Kosakata</span>
+        </button>
+        <button class="nav-tab" data-tab="tab-pdf" id="tabBtnPdf">
+          <i data-lucide="file-text"></i>
+          <span>Buku PDF Asli</span>
+          <span class="tab-badge" id="pdfStatusBadge">Siap Baca</span>
+        </button>
+        <button class="nav-tab" data-tab="tab-culture" id="tabBtnCulture">
+          <i data-lucide="compass"></i>
+          <span>Tata Bahasa & Budaya</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="main-wrapper">
+
+    <!-- ========================================== -->
+    <!-- TAB 1: PENCARIAN KOSAKATA (SEARCH VIEW) -->
+    <!-- ========================================== -->
+    <section class="tab-content active" id="tab-search">
+      
+      <!-- Kata Hari Ini Card -->
+      <article class="wotd-card" id="wotdSection">
+        <div class="wotd-header">
+          <span class="wotd-pill"><i data-lucide="sun"></i> KATA HARI INI (Pekappang Allo Ite)</span>
+          <button class="btn-icon-subtle" id="btnRefreshWotd" title="Ganti Kata Acak">
+            <i data-lucide="refresh-cw"></i>
+          </button>
+        </div>
+        <div class="wotd-body">
+          <div class="wotd-word-group">
+            <h2 class="wotd-word" id="wotdMandar">Marasa</h2>
+            <span class="wotd-phonetic" id="wotdPhonetic">/ma-ra-sa/</span>
+            <span class="wotd-pos" id="wotdPos">Adjektiva</span>
+          </div>
+          <p class="wotd-meaning" id="wotdMeaning">Enak, lezat, nikmat, mantap, menyenangkan</p>
+          <div class="wotd-example-box">
+            <p class="wotd-example-mandar" id="wotdExMandar">"Marasa tongang nande kandeang Mandar ite."</p>
+            <p class="wotd-example-indo" id="wotdExIndo">Artinya: Sungguh sangat lezat hidangan masakan Mandar ini.</p>
+          </div>
+        </div>
+        <div class="wotd-footer">
+          <button class="btn-card-action" id="btnSpeakWotd">
+            <i data-lucide="volume-2"></i> Dengarkan
+          </button>
+          <button class="btn-card-action" id="btnShareWotd">
+            <i data-lucide="share-2"></i> Bagikan ke WA
+          </button>
+          <button class="btn-card-action" id="btnFavWotd">
+            <i data-lucide="bookmark"></i> Simpan
+          </button>
+        </div>
+      </article>
+
+      <!-- Search & Filter Controls -->
+      <div class="search-panel">
+        <div class="search-bar-wrapper">
+          <i data-lucide="search" class="search-input-icon"></i>
+          <input 
+            type="search" 
+            id="searchInput" 
+            class="search-input" 
+            placeholder="Ketik kata Mandar atau bahasa Indonesia... (contoh: boyang, jepa, makan, perahu)" 
+            autocomplete="off"
+            aria-label="Cari kata di kamus"
+          >
+          <button class="btn-clear-search" id="btnClearSearch" title="Hapus teks" style="display: none;">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <div class="filter-controls">
+          <!-- Direction Switcher -->
+          <div class="direction-switch">
+            <button class="dir-btn active" data-dir="all" id="dirAll">Semua Arah</button>
+            <button class="dir-btn" data-dir="mandar-id" id="dirMandarId">Mandar ➔ Indonesia</button>
+            <button class="dir-btn" data-dir="id-mandar" id="dirIdMandar">Indonesia ➔ Mandar</button>
+          </div>
+
+          <!-- Quick Jump to PDF Search -->
+          <button class="btn-find-in-pdf" id="btnQuickPdfSearch" title="Cari kata ini di dokumen PDF asli">
+            <i data-lucide="file-search"></i> Cari di Buku PDF Asli
+          </button>
+        </div>
+
+        <!-- Category Filter Pills -->
+        <div class="category-scroll-container">
+          <div class="category-pills" id="categoryPills">
+            <button class="cat-pill active" data-category="all">Semua Kategori</button>
+            <button class="cat-pill" data-category="sapaan"><i data-lucide="users"></i> Sapaan & Sosial</button>
+            <button class="cat-pill" data-category="maritim"><i data-lucide="anchor"></i> Maritim & Sandeq</button>
+            <button class="cat-pill" data-category="budaya"><i data-lucide="feather"></i> Budaya & Saqbe</button>
+            <button class="cat-pill" data-category="kuliner"><i data-lucide="utensils"></i> Makanan Tradisional</button>
+            <button class="cat-pill" data-category="verba"><i data-lucide="activity"></i> Kata Kerja</button>
+            <button class="cat-pill" data-category="sifat"><i data-lucide="smile"></i> Sifat & Perasaan</button>
+            <button class="cat-pill" data-category="angka"><i data-lucide="hash"></i> Angka & Waktu</button>
+            <button class="cat-pill" data-category="alam"><i data-lucide="mountain"></i> Alam & Lingkungan</button>
+            <button class="cat-pill" data-category="tubuh"><i data-lucide="heart"></i> Anggota Tubuh</button>
+          </div>
+        </div>
+
+        <!-- Alphabet Index Quick Bar -->
+        <div class="alphabet-bar" id="alphabetBar">
+          <button class="alpha-btn active" data-letter="all">Semua</button>
+          <!-- A-Z buttons generated dynamically in app.js -->
+        </div>
+      </div>
+
+      <!-- Search Stats & Summary -->
+      <div class="results-header">
+        <p class="results-count" id="resultsCount">Menampilkan seluruh kosa kata...</p>
+        <div class="view-toggle">
+          <button class="view-btn active" id="btnViewGrid" title="Tampilan Kotak"><i data-lucide="layout-grid"></i></button>
+          <button class="view-btn" id="btnViewList" title="Tampilan Daftar"><i data-lucide="list"></i></button>
+        </div>
+      </div>
+
+      <!-- Dictionary Cards Grid -->
+      <div class="dictionary-grid" id="dictionaryGrid">
+        <!-- Word cards injected by app.js -->
+      </div>
+
+      <!-- Empty State / No Results -->
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <div class="empty-icon">
+          <i data-lucide="search-x"></i>
+        </div>
+        <h3 class="empty-title">Kosakata Tidak Ditemukan</h3>
+        <p class="empty-desc">Kata yang Anda cari belum tercatat di data ringkas. Coba cari langsung di dalam buku PDF lengkap atau periksa ejaan kata.</p>
+        <div class="empty-actions">
+          <button class="btn-primary" id="btnEmptySearchPdf">
+            <i data-lucide="file-search"></i> Cari Kata Ini di Dokumen PDF
+          </button>
+          <button class="btn-secondary" id="btnResetSearch">
+            <i data-lucide="rotate-ccw"></i> Reset Pencarian
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: PEMBACA PDF ASLI (PDF VIEWER) -->
+    <!-- ========================================== -->
+    <section class="tab-content" id="tab-pdf">
+      <div class="pdf-wrapper">
+        
+        <!-- PDF Info & Controller Bar -->
+        <div class="pdf-status-banner">
+          <div class="pdf-meta">
+            <div class="pdf-icon-box">
+              <i data-lucide="file-text"></i>
+            </div>
+            <div>
+              <h2 class="pdf-file-title" id="pdfCurrentFileName">Kamus Bahasa Mandar-Indonesia.pdf</h2>
+              <p class="pdf-subinfo">Buku rujukan bahasa resmi untuk masyarakat & pelestarian budaya Mandar</p>
+            </div>
+          </div>
+          <div class="pdf-quick-actions">
+            <a href="Kamus Bahasa Mandar-Indonesia.pdf" download="Kamus Bahasa Mandar-Indonesia.pdf" class="btn-pdf-download" id="btnDownloadPdf" title="Unduh Buku PDF Gratis">
+              <i data-lucide="download"></i> Unduh PDF Gratis
+            </a>
+            <label class="btn-pdf-upload" title="Buka File PDF dari HP / Komputer Anda">
+              <i data-lucide="folder-up"></i> Buka PDF Lokal
+              <input type="file" id="localPdfInput" accept="application/pdf" style="display: none;">
+            </label>
+          </div>
+        </div>
+
+        <!-- PDF Reader Toolbar -->
+        <div class="pdf-toolbar" role="toolbar" aria-label="Kontrol Pembaca PDF">
+          <!-- Page Navigation -->
+          <div class="toolbar-group">
+            <button class="tool-btn" id="btnPdfPrev" title="Halaman Sebelumnya">
+              <i data-lucide="chevron-left"></i>
+            </button>
+            <div class="page-indicator">
+              <input type="number" id="pdfPageNumInput" value="1" min="1" aria-label="Nomor Halaman">
+              <span>/</span>
+              <span id="pdfTotalPages">--</span>
+            </div>
+            <button class="tool-btn" id="btnPdfNext" title="Halaman Berikutnya">
+              <i data-lucide="chevron-right"></i>
+            </button>
+          </div>
+
+          <!-- Zoom Controls -->
+          <div class="toolbar-group">
+            <button class="tool-btn" id="btnPdfZoomOut" title="Perkecil (-)">
+              <i data-lucide="zoom-out"></i>
+            </button>
+            <span class="zoom-level-text" id="pdfZoomText">100%</span>
+            <button class="tool-btn" id="btnPdfZoomIn" title="Perbesar (+)">
+              <i data-lucide="zoom-in"></i>
+            </button>
+            <button class="tool-btn" id="btnPdfFitWidth" title="Sesuaikan Lebar Layar">
+              <i data-lucide="maximize-2"></i>
+            </button>
+          </div>
+
+          <!-- Search In PDF -->
+          <div class="toolbar-group pdf-search-group">
+            <div class="pdf-search-input-box">
+              <i data-lucide="search"></i>
+              <input type="text" id="pdfSearchInput" placeholder="Cari kata dalam PDF..." aria-label="Cari kata dalam PDF">
+            </div>
+            <button class="tool-btn" id="btnPdfSearchNext" title="Temukan Kata">
+              <i data-lucide="arrow-right"></i>
+            </button>
+            <span class="pdf-search-results-info" id="pdfSearchMatchCount"></span>
+          </div>
+
+          <!-- Extra Tools -->
+          <div class="toolbar-group">
+            <button class="tool-btn" id="btnPdfFullscreen" title="Layar Penuh">
+              <i data-lucide="expand"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- PDF Loading & Status Notifications -->
+        <div class="pdf-notification-box" id="pdfNotification" style="display: none;">
+          <div class="notify-icon"><i data-lucide="info"></i></div>
+          <div class="notify-content" id="pdfNotifyContent">
+            Memuat dokumen PDF...
+          </div>
+        </div>
+
+        <!-- PDF Canvas & Text Layer Viewer Container -->
+        <div class="pdf-viewport" id="pdfViewport">
+          <div class="pdf-page-container" id="pdfPageContainer">
+            <div class="pdf-loading-spinner" id="pdfSpinner">
+              <div class="spinner"></div>
+              <p>Membuka buku kamus...</p>
+            </div>
+            <canvas id="pdfCanvas"></canvas>
+            <div id="pdfTextLayer" class="textLayer"></div>
+          </div>
+        </div>
+
+        <!-- PDF Search Results Drawer (If Matches Found) -->
+        <div class="pdf-matches-drawer" id="pdfMatchesDrawer" style="display: none;">
+          <div class="matches-header">
+            <h4><i data-lucide="list-filter"></i> Ditemukan di Halaman:</h4>
+            <button class="btn-close-matches" id="btnCloseMatches"><i data-lucide="x"></i></button>
+          </div>
+          <div class="matches-list" id="pdfMatchesList">
+            <!-- Matches populated by JS -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: TATA BAHASA & BUDAYA (CULTURE) -->
+    <!-- ========================================== -->
+    <section class="tab-content" id="tab-culture">
+      <div class="culture-container">
+        
+        <!-- Header Info -->
+        <div class="culture-hero">
+          <div class="culture-hero-badge"><i data-lucide="landmark"></i> WARISAN BUDAYA NUSANTARA</div>
+          <h2>Kekayaan Bahasa & Budaya Suku Mandar</h2>
+          <p>Mandar adalah suku maritim dan agraris terkemuka di pesisir barat Sulawesi (Sulawesi Barat), terkenal dengan perahu bercadik Sandeq, sarung tenun Saqbe, serta falsafah hidup yang luhur.</p>
+        </div>
+
+        <!-- Culture Cards Grid -->
+        <div class="culture-grid">
+          
+          <!-- Card 1: Falsafah Luhur -->
+          <article class="culture-card">
+            <div class="card-art-header bg-navy">
+              <i data-lucide="shield"></i>
+              <h3>Falsafah Hidup Mandar</h3>
+            </div>
+            <div class="card-content">
+              <h4>1. Siri' anna Pacce</h4>
+              <p>Menjaga martabat, harga diri (siri'), integritas moral serta rasa empati dan kesetiakawanan yang mendalam (pacce) terhadap sesama manusia.</p>
+              
+              <h4>2. Siwaliparriq</h4>
+              <p>Prinsip gotong-royong sejati. Bersama-sama memikul beban suka dan duka dalam kehidupan bermasyarakat, baik di laut maupun di darat.</p>
+
+              <h4>3. Pitu Babana Binanga & Pitu Ulunna Salu</h4>
+              <p>Persatuan tujuh kerajaan muara sungai di pesisir pantai dan tujuh kerajaan di hulu sungai pegunungan yang saling melengkapi.</p>
+            </div>
+          </article>
+
+          <!-- Card 2: Ciri Khas Bahasa -->
+          <article class="culture-card">
+            <div class="card-art-header bg-gold">
+              <i data-lucide="sparkles"></i>
+              <h3>Ciri Khas Bahasa Mandar</h3>
+            </div>
+            <div class="card-content">
+              <h4>1. Huruf Hamzah / Glottal Stop (' atau q)</h4>
+              <p>Bahasa Mandar sering menggunakan perhentian glottal di tengah atau akhir kata, ditulis dengan tanda petik (<strong>'</strong>) atau huruf (<strong>q</strong>). Contoh: <em>kaka' / kakaq</em>, <em>indo' / indoq</em>, <em>saqbe</em>.</p>
+
+              <h4>2. Keragaman Dialek</h4>
+              <p>Memiliki ragam dialek yang kaya seperti <strong>Dialek Balanipa</strong> (baku/umum), <strong>Sendana</strong>, <strong>Pamboang</strong>, <strong>Banggae</strong>, dan <strong>Malunda</strong>.</p>
+
+              <h4>3. Tingkatan Tutur Santun</h4>
+              <p>Menggunakan kata <strong>Tabe'</strong> (permisi/santun) dan sapaan penghormatan seperti <strong>Kita'</strong> kepada orang yang lebih tua atau dihormati.</p>
+            </div>
+          </article>
+
+          <!-- Card 3: Ikon Tradisi Mandar -->
+          <article class="culture-card">
+            <div class="card-art-header bg-ocean">
+              <i data-lucide="anchor"></i>
+              <h3>Ikon Kebanggaan Mandar</h3>
+            </div>
+            <div class="card-content">
+              <h4>1. Perahu Sandeq</h4>
+              <p>Perahu layar kayu bercadik teramah lingkungan dan tercepat di dunia, mampu menaklukkan gelombang samudra hingga ke Jawa dan Singapura.</p>
+
+              <h4>2. Lipa Saqbe Mandar</h4>
+              <p>Sarung sutra tenun tangan warisan leluhur dengan aneka corak geometris klasik seperti <em>Sure' Penghulu</em>, <em>Sure' Bunga</em>, dan <em>Sure' Marasa</em>.</p>
+
+              <h4>3. Kuliner Jepa & Bau Peapi</h4>
+              <p>Makanan pokok sehat dari olahan singkong (Jepa) yang disantap bersama kuah ikan kuning asam mangga khas Mandar (Bau Peapi).</p>
+            </div>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- MODAL: KATA FAVORIT (BOOKMARK) -->
+  <!-- ========================================== -->
+  <dialog class="app-dialog" id="favDialog">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <div class="dialog-title-group">
+          <i data-lucide="bookmark" class="dialog-icon"></i>
+          <h3>Kosakata Favorit Saya</h3>
+        </div>
+        <button class="btn-close-dialog" id="btnCloseFavDialog"><i data-lucide="x"></i></button>
+      </div>
+      <div class="dialog-body">
+        <div id="favListContainer" class="fav-list">
+          <!-- Populated by JS -->
+        </div>
+        <div id="favEmptyNotice" class="fav-empty-notice" style="display: none;">
+          <p>Belum ada kosakata yang disimpan.</p>
+          <span>Klik ikon bookmark pada kartu kata untuk menyimpannya ke daftar ini.</span>
+        </div>
+      </div>
+      <div class="dialog-footer">
+        <button class="btn-clear-all-fav" id="btnClearAllFav"><i data-lucide="trash-2"></i> Hapus Semua</button>
+        <button class="btn-primary" id="btnDoneFav">Tutup</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ========================================== -->
+  <!-- MODAL: PANDUAN DEPLOY GITHUB PAGES (GRATIS) -->
+  <!-- ========================================== -->
+  <dialog class="app-dialog" id="deployDialog">
+    <div class="dialog-content deploy-modal">
+      <div class="dialog-header">
+        <div class="dialog-title-group">
+          <i data-lucide="github" class="dialog-icon"></i>
+          <h3>Panduan Deploy Online GitHub Pages (Gratis)</h3>
+        </div>
+        <button class="btn-close-dialog" id="btnCloseDeployDialog"><i data-lucide="x"></i></button>
+      </div>
+      <div class="dialog-body">
+        <p class="deploy-intro">Website ini sudah dirancang <strong>100% siap online</strong> melalui layanan gratis GitHub Pages tanpa biaya server selamanya!</p>
+
+        <div class="deploy-steps">
+          <div class="step-card">
+            <div class="step-num">1</div>
+            <div class="step-desc">
+              <h4>Buat Repository Baru di GitHub</h4>
+              <p>Buka <a href="https://github.com/new" target="_blank" rel="noopener">github.com/new</a>, beri nama repository misalnya: <code>kamus-bahasa-mandar</code>, dan pilih <strong>Public</strong>.</p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <div class="step-desc">
+              <h4>Upload Seluruh File & PDF</h4>
+              <p>Pastikan file PDF Anda diberi nama persis:</p>
+              <div class="code-badge"><code>Kamus Bahasa Mandar-Indonesia.pdf</code></div>
+              <p class="small-text">Sistem web ini secara otomatis membaca file PDF dengan nama tersebut begitu diunggah ke GitHub.</p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <div class="step-desc">
+              <h4>Aktifkan GitHub Pages (1-Klik)</h4>
+              <p>Di halaman repository GitHub Anda, masuk ke menu: <br>
+              <strong>Settings</strong> ➔ <strong>Pages</strong> ➔ Di bawah <em>Branch</em> pilih <strong>main</strong> atau <strong>master</strong> (folder <strong>/root</strong>) ➔ Klik <strong>Save</strong>.</p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">4</div>
+            <div class="step-desc">
+              <h4>Website Langsung Aktif & Bisa Diakses Gratis!</h4>
+              <p>Dalam 1-2 menit, website resmi kamus sudah aktif di alamat:</p>
+              <div class="code-badge"><code>https://[username-github].github.io/[nama-repo]/</code></div>
+              <p class="small-text">Bisa dibuka dari HP Android, iPhone, tablet, maupun komputer oleh seluruh masyarakat Mandar!</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="dialog-footer">
+        <button class="btn-primary" id="btnDoneDeploy">Saya Mengerti</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Toast Notification -->
+  <div class="toast-container" id="toastBox"></div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <div class="footer-brand">
+          <i data-lucide="book-open"></i>
+          <h4>Kamus Digital Mandar - Indonesia</h4>
+        </div>
+        <p class="footer-about">
+          Persembahan Boyang Digital untuk pelestarian bahasa ibu dan warisan leluhur Mandar di era digital. Bebas diakses dan disebarluaskan oleh siapa saja tanpa dipungut biaya.
+        </p>
+      </div>
+      <div class="footer-col">
+        <h4>Falsafah Mandar</h4>
+        <p class="quote-text"><em>"Mellomo lomo lalingna passandeq, masigi' tongang ditompa anging."</em></p>
+        <p class="quote-sub">Lincah perahu Sandeq melaju, cepat lajunya didorong angin kearifan.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Akses Cepat</h4>
+        <ul class="footer-links">
+          <li><a href="#" id="footLinkSearch">Cari Kosakata</a></li>
+          <li><a href="#" id="footLinkPdf">Buku Kamus PDF Asli</a></li>
+          <li><a href="#" id="footLinkCulture">Budaya & Sejarah Mandar</a></li>
+          <li><a href="#" id="footLinkDeploy">Cara Pasang di GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Boyang Digital • Pelestarian Bahasa Daerah Mandar (Sulawesi Barat)</p>
+      <p class="footer-tag">Siwaliparriq • Siri' anna Pacce</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="dictionary-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
